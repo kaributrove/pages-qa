@@ -130,6 +130,9 @@
     <button class="save-btn" id="save-btn">Save &amp; rebuild site</button>
 
     <p class="view-link">← <a href="https://kaributrove.github.io/pages/h/jo-austin-hwup3z/">View your site</a></p>
+    <p class="view-link" style="margin-top:8px;">
+      <a href="/manage-login?slug=jo-austin" style="color:var(--muted);font-size:.8rem;">Request a new login link</a>
+    </p>
   </div>
 
   <!-- Rebuilding overlay — hidden until save -->
@@ -144,6 +147,17 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
   (function () {
+    // Read session token from magic link redirect
+    (function() {
+      var hash = window.location.hash;
+      var m = hash.match(/[#&]sess=([^&]+)/);
+      if (m) {
+        sessionStorage.setItem('kt_sess', decodeURIComponent(m[1]));
+        history.replaceState(null, '', window.location.pathname);
+      }
+    })();
+    var SESSION_TOKEN = sessionStorage.getItem('kt_sess') || null;
+
     var SLUG         = 'jo-austin';
     var OUTPUT_SLUG  = 'jo-austin-hwup3z';
     var MANAGE_TOKEN = 'ahcsc2xcwj3z';
@@ -198,6 +212,7 @@
             slug:          SLUG,
             output_slug:   OUTPUT_SLUG,
             manage_token:  MANAGE_TOKEN,
+            session_token: SESSION_TOKEN,
             nightly_rate:  rate,
             currency:      curr,
             blocked_dates: blocked,
